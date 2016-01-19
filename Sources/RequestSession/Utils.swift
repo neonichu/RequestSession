@@ -5,6 +5,8 @@ func async(block: (Void) -> Void) {
   block()
 }
 
+import Foundation
+
 extension String {
   func dataUsingEncoding(encoding: UInt) -> NSData? {
     self.withCString { (bytes) in

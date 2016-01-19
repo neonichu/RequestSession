@@ -24,7 +24,12 @@ public class HTTPSessionDataTask {
   }
 
   private func makeError(message: String? = nil) -> NSError {
+    #if os(Linux)
+    var userInfo = [String:Any]()
+    #else
     var userInfo = [String:String]()
+    #endif
+
     if let message = message {
       userInfo[NSLocalizedDescriptionKey] = message
     }
