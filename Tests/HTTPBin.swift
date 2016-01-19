@@ -17,8 +17,8 @@ func describeGet() {
       let url = NSURL(string: "http://httpbin.org/headers")!
       let task = session.dataTaskWithURL(url) { (data, response, error) in
         httpBody = NSString(data: data!, encoding: NSUTF8StringEncoding)
-        httpBody = httpBody?.stringByReplacingOccurrencesOfString(" ", withString: "")
-        httpBody = httpBody?.stringByReplacingOccurrencesOfString("\n", withString: "")
+        httpBody = NSString(string: httpBody!.stringByReplacingOccurrencesOfString(" ", withString: ""))
+        httpBody = NSString(string: httpBody!.stringByReplacingOccurrencesOfString("\n", withString: ""))
 
         httpResponse = response as? NSHTTPURLResponse
         httpError = error
