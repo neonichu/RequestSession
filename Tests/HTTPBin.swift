@@ -11,7 +11,7 @@ func describeGet() {
 
       var httpBody: NSString?
       var httpError: NSError?
-      var httpResponse: NSHTTPURLResponse?
+      var httpResponse: HTTPURLResponse?
 
       let expectation = Expectation()
       let url = NSURL(string: "http://httpbin.org/headers")!
@@ -20,7 +20,7 @@ func describeGet() {
         httpBody = NSString(string: httpBody!.stringByReplacingOccurrencesOfString(" ", withString: ""))
         httpBody = NSString(string: httpBody!.stringByReplacingOccurrencesOfString("\n", withString: ""))
 
-        httpResponse = response as? NSHTTPURLResponse
+        httpResponse = response
         httpError = error
 
         expectation.fulfil()

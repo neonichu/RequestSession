@@ -10,7 +10,7 @@ public class HTTPSessionConfiguration {
   }
 }
 
-public typealias HTTPCompletionFunc = ((NSData?, NSURLResponse?, NSError?) -> Void)
+public typealias HTTPCompletionFunc = ((NSData?, HTTPURLResponse?, NSError?) -> Void)
 
 public class HTTPSessionDataTask {
   let completion: HTTPCompletionFunc
@@ -54,7 +54,7 @@ public class HTTPSessionDataTask {
     }
 
     if let response = response, body = response.body {
-      let urlResponse = NSHTTPURLResponse(URL: URL, statusCode: 200,
+      let urlResponse = HTTPURLResponse(URL: URL, statusCode: 200,
         HTTPVersion: "1.1", headerFields: nil)
       completion(body.dataUsingEncoding(NSUTF8StringEncoding), urlResponse, nil)
     } else {
@@ -76,5 +76,20 @@ public class HTTPSession {
 
   public func dataTaskWithURL(url: NSURL, completion: HTTPCompletionFunc) -> HTTPSessionDataTask {
     return HTTPSessionDataTask(configuration: configuration, URL: url, completion: completion)
+  }
+}
+
+public class HTTPURLResponse {
+  let HTTPVersion: String
+
+  public let allHeaderFields: [NSObject:AnyObject]
+  public let statusCode: Int
+  public let URL: NSURL
+
+  public init(URL: NSURL, statusCode: Int, HTTPVersion: String, headerFields: [NSObject:AnyObject]?) {
+    self.URL = URL
+    self.statusCode = statusCode
+    self.HTTPVersion = HTTPVersion
+    self.allHeaderFields = headerFields ?? [NSObject:AnyObject]()
   }
 }
