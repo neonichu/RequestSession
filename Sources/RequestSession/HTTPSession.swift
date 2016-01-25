@@ -56,7 +56,11 @@ public class HTTPSessionDataTask {
     if let response = response, body = response.body {
       let urlResponse = HTTPURLResponse(URL: URL, statusCode: 200,
         HTTPVersion: "1.1", headerFields: nil)
-      completion(body.dataUsingEncoding(NSUTF8StringEncoding), urlResponse, nil)
+      if let body = NSString(string: body).dataUsingEncoding(NSUTF8StringEncoding) {
+        completion(body, urlResponse, nil)
+      } else {
+        completion(nil, urlResponse, makeError("NSData conversion failed: \(body)"))
+      }
     } else {
       completion(nil, nil, makeError("Empty HTTP response body."))
     }
