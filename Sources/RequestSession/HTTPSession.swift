@@ -1,6 +1,18 @@
 import Foundation
 import Inquiline
+import Nest
 import Requests
+
+extension PayloadType {
+  mutating func asString() -> String {
+    var bytes = [UInt8]()
+    repeat {
+      guard let nextBytes = self.next() else { break }
+      bytes += nextBytes
+    } while true
+    return String(bytes)
+  }
+}
 
 public class HTTPSessionConfiguration {
   public var HTTPAdditionalHeaders = [String:String]()
@@ -53,10 +65,11 @@ public class HTTPSessionDataTask {
       return
     }
 
-    if let response = response, body = response.body {
+    var body = response?.body
+    if let body = body?.asString() {
       let urlResponse = HTTPURLResponse(URL: URL, statusCode: 200,
         HTTPVersion: "1.1", headerFields: nil)
-      if let body = NSString(string: body).dataUsingEncoding(NSUTF8StringEncoding) {
+      if let body = NSString(string: body).data(usingEncoding: NSUTF8StringEncoding) {
         completion(body, urlResponse, nil)
       } else {
         completion(nil, urlResponse, makeError("NSData conversion failed: \(body)"))
